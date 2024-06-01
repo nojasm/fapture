@@ -164,7 +164,7 @@ class PageCacher {
 	// Returns the unprocessed .html file of a github repository
 	getHTMLPPFileFromGitHub(username, repo, cb) {
 		console.log("Receiving HTML++ file...");
-		this.getFileFromGitHub(username, repo, (file) => {
+		this.getFileFromGitHub(username, repo, "index.html", (file) => {
 			cb(file);
 		});
 	}

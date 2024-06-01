@@ -17,6 +17,9 @@ This will start the server on port 3000.
 ## How the search works
 - ToDo
 
+## Converting everything to browser-HTML
+There are certain functions that 
+
 ## Caching
 - ToDo
 
