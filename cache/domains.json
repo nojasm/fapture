@@ -1,0 +1,897 @@
+[
+    {
+        "ip": "https://github.com/face-hh/webx-registrar",
+        "name": "register",
+        "tld": "it"
+    },
+    {
+        "ip": "smartlinux.xyz",
+        "name": "smartlinux",
+        "tld": "rizz"
+    },
+    {
+        "ip": "https://github.com/Smartlinuxcoder/iusearch.btw",
+        "name": "iusearch",
+        "tld": "btw"
+    },
+    {
+        "ip": "https://github.com/illy-dev/website-for-bussin-web",
+        "name": "skibidi",
+        "tld": "rizz"
+    },
+    {
+        "ip": "https://github.com/Smartlinuxcoder/sigma-bank",
+        "name": "bank",
+        "tld": "sigma"
+    },
+    {
+        "ip": "127.0.0.1",
+        "name": "localhost",
+        "tld": "web"
+    },
+    {
+        "ip": "https://github.com/creeperita09/Webx-bio",
+        "name": "creeperita",
+        "tld": "it"
+    },
+    {
+        "ip": "0.0.0.0",
+        "name": "bussutils",
+        "tld": "rizz"
+    },
+    {
+        "ip": "https://github.com/JustDoom/justdoom-webx",
+        "name": "justdoom",
+        "tld": "dev"
+    },
+    {
+        "ip": "127.0.0.1",
+        "name": "sony",
+        "tld": "web"
+    },
+    {
+        "ip": "https://github.com/Adrik-LOL/WXDP-Website",
+        "name": "webxdpack",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://github.com/schoeneBiene/buss-goodbee.dev",
+        "name": "bee",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://github.com/kitaminka/small-projects",
+        "name": "kitaminka",
+        "tld": "root"
+    },
+    {
+        "ip": "https://github.com/efekos/webx-fuckcommonjs",
+        "name": "fuckcommonjs",
+        "tld": "fr"
+    },
+    {
+        "ip": "https://github.com/fin-github/HelloWorldNapture/",
+        "name": "helloworld",
+        "tld": "fr"
+    },
+    {
+        "ip": "https://github.com/AJXD2/buss-site",
+        "name": "google",
+        "tld": "lol"
+    },
+    {
+        "ip": "example.com",
+        "name": "example",
+        "tld": "fr"
+    },
+    {
+        "ip": "https://github.com/funnsam/i-use-arch-webx",
+        "name": "i-use-arch",
+        "tld": "btw"
+    },
+    {
+        "ip": "https://github.com/GStudiosX2/buss-gstudiosx2.lol",
+        "name": "gstudiosx",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://github.com/efekos/webx-fuckcommonjs",
+        "name": "fuckcommonjs",
+        "tld": "btw"
+    },
+    {
+        "ip": "https://github.com/PixelFacts/pug",
+        "name": "pug",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://github.com/PixelFacts/pug/index.html",
+        "name": "pug",
+        "tld": "web"
+    },
+    {
+        "ip": "https://github.com/tiagorangel2011/bussinweb-nomoreuglywebsites",
+        "name": "ugly",
+        "tld": "web"
+    },
+    {
+        "ip": "0.0.0.0",
+        "name": "tr",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://github.com/PixelFacts/chatroom",
+        "name": "chat",
+        "tld": "it"
+    },
+    {
+        "ip": "https://github.com/face-hh/dingle-frontend",
+        "name": "dingle",
+        "tld": "it"
+    },
+    {
+        "ip": "https://github.com/x86-assembly/webx-test",
+        "name": "arch",
+        "tld": "btw"
+    },
+    {
+        "ip": "https://github.com/face-hh/webx-registrar",
+        "name": "griddycode",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://github.com/tavithedev/napture-website",
+        "name": "napture",
+        "tld": "web"
+    },
+    {
+        "ip": "https://github.com/Smartlinuxcoder/yapping-chat",
+        "name": "chat",
+        "tld": "yap"
+    },
+    {
+        "ip": "https://github.com/TheAspectDev/webx-chat.lol",
+        "name": "chat",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://github.com/Adrik-LOL/AudioX",
+        "name": "audiox",
+        "tld": "rizz"
+    },
+    {
+        "ip": "8.8.8.8",
+        "name": "test",
+        "tld": "fr"
+    },
+    {
+        "ip": "a",
+        "name": "rizz",
+        "tld": "uwu"
+    },
+    {
+        "ip": "a",
+        "name": "rizzler",
+        "tld": "uwu"
+    },
+    {
+        "ip": "b",
+        "name": "fopakpk",
+        "tld": "lol"
+    },
+    {
+        "ip": "@facedevstuff",
+        "name": "search",
+        "tld": "root"
+    },
+    {
+        "ip": "@facedevstuff",
+        "name": "search",
+        "tld": "web"
+    },
+    {
+        "ip": "8.8.8.8",
+        "name": "faceisadev",
+        "tld": "rizz"
+    },
+    {
+        "ip": "@facedevstuff",
+        "name": "faceverse",
+        "tld": "fr"
+    },
+    {
+        "ip": "google.com",
+        "name": "google",
+        "tld": "mf"
+    },
+    {
+        "ip": "https://github.com/Adrik-LOL/sito.uwu",
+        "name": "sito",
+        "tld": "uwu"
+    },
+    {
+        "ip": "172.26.144.1",
+        "name": "no",
+        "tld": "scam"
+    },
+    {
+        "ip": "https://github.com/GStudiosX2/random-now",
+        "name": "random",
+        "tld": "now"
+    },
+    {
+        "ip": "https://defaultbox.xyz",
+        "name": "box",
+        "tld": "zip"
+    },
+    {
+        "ip": "buss://",
+        "name": "mcdonalds",
+        "tld": "now"
+    },
+    {
+        "ip": "https://github.com/KristalliDev/noxoius",
+        "name": "kristalli",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://spelis.github.io/",
+        "name": "spelis",
+        "tld": "dev"
+    },
+    {
+        "ip": "http://127.0.0.1:3000",
+        "name": "oha",
+        "tld": "fr"
+    },
+    {
+        "ip": "https://pornhub.com",
+        "name": "porn",
+        "tld": "sigma"
+    },
+    {
+        "ip": "https://en.wikipedia.org/wiki/Nigger",
+        "name": "nigger",
+        "tld": "sigma"
+    },
+    {
+        "ip": "https://en.wikipedia.org/wiki/Ohio",
+        "name": "ohio",
+        "tld": "web"
+    },
+    {
+        "ip": "https://llrix-ofc.github.io/web/",
+        "name": "llrix",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://en.wikipedia.org/wiki/Ohio",
+        "name": "ohio",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://github.com/blackmare420/bussintest_0/",
+        "name": "bussintest",
+        "tld": "uwu"
+    },
+    {
+        "ip": "https://xn--rl8hlm.tk",
+        "name": "ihateniggers",
+        "tld": "sigma"
+    },
+    {
+        "ip": "194.163.160.3",
+        "name": "mikarific",
+        "tld": "web"
+    },
+    {
+        "ip": "http://vacancies-usage-whom-seating.trycloudflare.com/",
+        "name": "bubble",
+        "tld": "it"
+    },
+    {
+        "ip": "https://github.com/ItsRemix/webx-registrar-fr",
+        "name": "register",
+        "tld": "fr"
+    },
+    {
+        "ip": "https://github.com/herrahenu/empunkellaribuss",
+        "name": "empunkellari",
+        "tld": "uwu"
+    },
+    {
+        "ip": "http://192.168.0.161:2935/",
+        "name": "python-tips",
+        "tld": "mf"
+    },
+    {
+        "ip": "https://semen.makeup/",
+        "name": "semenmakeup",
+        "tld": "lol"
+    },
+    {
+        "ip": "127.3.1.21",
+        "name": "arch",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://pigaros.uwu",
+        "name": "pigaros",
+        "tld": "uwu"
+    },
+    {
+        "ip": "https://nanos.club",
+        "name": "nano",
+        "tld": "sigma"
+    },
+    {
+        "ip": "1.2.3.4",
+        "name": "america",
+        "tld": "lol"
+    },
+    {
+        "ip": "0.0.0.0",
+        "name": "minecraft",
+        "tld": "web"
+    },
+    {
+        "ip": "https://pwn.guide",
+        "name": "pwn",
+        "tld": "it"
+    },
+    {
+        "ip": "http://pescebeddo.com",
+        "name": "beddo",
+        "tld": "rizz"
+    },
+    {
+        "ip": "https://github.com/blackmare420/Hungary.root/",
+        "name": "hungary",
+        "tld": "root"
+    },
+    {
+        "ip": "https://ggauzin.github.io/bussin_chain/",
+        "name": "ggauzin",
+        "tld": "sigma"
+    },
+    {
+        "ip": "https://pornhub.com",
+        "name": "sex",
+        "tld": "now"
+    },
+    {
+        "ip": "https://github.com/PayDash/Scam",
+        "name": "vibez",
+        "tld": "scam"
+    },
+    {
+        "ip": "https://github.com/RoxyJones53280/turbo-tribble",
+        "name": "roxyandblackie",
+        "tld": "uwu"
+    },
+    {
+        "ip": "https://github.com/IulianArian/IulianArian-WebX",
+        "name": "iulianarian",
+        "tld": "web"
+    },
+    {
+        "ip": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "name": "real",
+        "tld": "sigma"
+    },
+    {
+        "ip": "127.0.0.1",
+        "name": "start",
+        "tld": "now"
+    },
+    {
+        "ip": "http://kerso.dev",
+        "name": "kerso",
+        "tld": "web"
+    },
+    {
+        "ip": "https://github.com/rathlinus/buss",
+        "name": "doom",
+        "tld": "scam"
+    },
+    {
+        "ip": "https://google.wxcoy.cc",
+        "name": "franz",
+        "tld": "dev"
+    },
+    {
+        "ip": "185.199.111.153",
+        "name": "jirmu",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://rayray1099.github.io/axowebsite",
+        "name": "axo",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://katjenish.github.io/idkatall/",
+        "name": "gay",
+        "tld": "lol"
+    },
+    {
+        "ip": "127.0.0.1",
+        "name": "bitch",
+        "tld": "sigma"
+    },
+    {
+        "ip": "https://github.com/xxanqw/skibidibuss/",
+        "name": "skibiditoilet",
+        "tld": "sigma"
+    },
+    {
+        "ip": "localhost:3000",
+        "name": "verycoolstuffreal",
+        "tld": "rizz"
+    },
+    {
+        "ip": "http://127.0.0.1:5500",
+        "name": "register",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://github.com/Rouf0x/BussinWebsite/",
+        "name": "admin",
+        "tld": "root"
+    },
+    {
+        "ip": "https://camphouse.vmgware.dev/",
+        "name": "camphouse",
+        "tld": "web"
+    },
+    {
+        "ip": "https://youtube.com",
+        "name": "youtube",
+        "tld": "lol"
+    },
+    {
+        "ip": "127.0.0.1",
+        "name": "games",
+        "tld": "sigma"
+    },
+    {
+        "ip": "https://github.com/fsh-org/Fsh-plus-buss",
+        "name": "fsh",
+        "tld": "uwu"
+    },
+    {
+        "ip": "https://hessf.fr",
+        "name": "suckmydick",
+        "tld": "habibi"
+    },
+    {
+        "ip": "141.94.37.248",
+        "name": "money",
+        "tld": "scam"
+    },
+    {
+        "ip": "1.1.1.1",
+        "name": "skibidirizz",
+        "tld": "sigma"
+    },
+    {
+        "ip": "https://github.com/Nobody0163/undefined",
+        "name": "web",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://eaglercraft.q13x.com",
+        "name": "eaglercraft",
+        "tld": "uwu"
+    },
+    {
+        "ip": "https://paladinsrv.com",
+        "name": "freehost",
+        "tld": "now"
+    },
+    {
+        "ip": "gum.catboatmc.com",
+        "name": "cat",
+        "tld": "web"
+    },
+    {
+        "ip": "158.69.154.131",
+        "name": "juan",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://theproshi.github.io/Website/",
+        "name": "theproshi",
+        "tld": "dev"
+    },
+    {
+        "ip": "195.154.38.14",
+        "name": "ariez",
+        "tld": "lol"
+    },
+    {
+        "ip": "172.66.44.210",
+        "name": "net",
+        "tld": "uwu"
+    },
+    {
+        "ip": "159.224.173.169",
+        "name": "wlodekm",
+        "tld": "dev"
+    },
+    {
+        "ip": "1.1.1.1",
+        "name": "kira",
+        "tld": "uwu"
+    },
+    {
+        "ip": "https://github.com/marcandreher/bussin-test",
+        "name": "btest",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://github.com/Kot2000/baselua.dev",
+        "name": "baselua",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://google.com",
+        "name": "google",
+        "tld": "it"
+    },
+    {
+        "ip": "http://178.37.27.179:4434",
+        "name": "nya",
+        "tld": "uwu"
+    },
+    {
+        "ip": "https://github.com/jnjbnfdgjnkfdgkjhfgjkfggfdgf/jnjbnfdgjnkfdgkjhfgjkfggfdgf.github.io",
+        "name": "themonkemodder",
+        "tld": "sigma"
+    },
+    {
+        "ip": "https://legeriergeek.fr/nkwaiishop",
+        "name": "nkwaiishop",
+        "tld": "fr"
+    },
+    {
+        "ip": "https://github.com/whatwg/html.git",
+        "name": "archbtw",
+        "tld": "lol"
+    },
+    {
+        "ip": "127.0.0.1",
+        "name": "explore",
+        "tld": "it"
+    },
+    {
+        "ip": "https://github.com/vt-d/gpt.sigma",
+        "name": "gpt",
+        "tld": "sigma"
+    },
+    {
+        "ip": "https://github.com/BlankTuber/webxSite",
+        "name": "theregistry",
+        "tld": "web"
+    },
+    {
+        "ip": "https://github.com/igamer609/iteam_bussin-web",
+        "name": "iteam",
+        "tld": "it"
+    },
+    {
+        "ip": "https://github.com/fsh-org/Fsh-plus-buss",
+        "name": "fsh",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://github.com/orktributes/OrkTributes",
+        "name": "orktributes",
+        "tld": "rizz"
+    },
+    {
+        "ip": "https://github.com/goodzombz/yap",
+        "name": "yap",
+        "tld": "yap"
+    },
+    {
+        "ip": "ht",
+        "name": "yippie",
+        "tld": "rizz"
+    },
+    {
+        "ip": "https://jdudeo5972.github.io/",
+        "name": "jdudeo",
+        "tld": "sigma"
+    },
+    {
+        "ip": "https://github.com/eggdll/robucksite",
+        "name": "robux",
+        "tld": "scam"
+    },
+    {
+        "ip": "https://github.com/Smartlinuxcoder/yapping-chat",
+        "name": "test",
+        "tld": "yap"
+    },
+    {
+        "ip": "https://stefcodes.co.uk",
+        "name": "stefcodes",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://capl.tech",
+        "name": "capl-has",
+        "tld": "rizz"
+    },
+    {
+        "ip": "https://github.com/Rouf0x/BussinWebsite",
+        "name": "roufox",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://aero.rf.gd/index.html",
+        "name": "alex",
+        "tld": "yap"
+    },
+    {
+        "ip": "127.0.0.1",
+        "name": "lostmc",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "name": "macka",
+        "tld": "uwu"
+    },
+    {
+        "ip": "69.69.69",
+        "name": "scam",
+        "tld": "scam"
+    },
+    {
+        "ip": "https://github.com/ArrowAced/napture-arrow.uwu/",
+        "name": "arrow",
+        "tld": "uwu"
+    },
+    {
+        "ip": "https://github.com/Mubbletm/corn",
+        "name": "cornhub",
+        "tld": "uwu"
+    },
+    {
+        "ip": "69.69.69",
+        "name": "sigma",
+        "tld": "sigma"
+    },
+    {
+        "ip": "69.69.69",
+        "name": "fr",
+        "tld": "fr"
+    },
+    {
+        "ip": "https://arachi.network",
+        "name": "arachionlyfor",
+        "tld": "sigma"
+    },
+    {
+        "ip": "69.69.69",
+        "name": "mf",
+        "tld": "mf"
+    },
+    {
+        "ip": "69.69.69.69",
+        "name": "btw",
+        "tld": "btw"
+    },
+    {
+        "ip": "https://hugodev.haaxman.co.uk/",
+        "name": "hugo",
+        "tld": "dev"
+    },
+    {
+        "ip": "1.1.1.1.1",
+        "name": "zip",
+        "tld": "zip"
+    },
+    {
+        "ip": "http://77.221.158.223",
+        "name": "x",
+        "tld": "uwu"
+    },
+    {
+        "ip": "69.45.76",
+        "name": "uwu",
+        "tld": "uwu"
+    },
+    {
+        "ip": "1.1.1..1.1.1",
+        "name": "lol",
+        "tld": "lol"
+    },
+    {
+        "ip": "4556.65656.5656",
+        "name": "web",
+        "tld": "web"
+    },
+    {
+        "ip": "1.1.1.1.6.4",
+        "name": "habibi",
+        "tld": "habibi"
+    },
+    {
+        "ip": "google.com",
+        "name": "batch",
+        "tld": "lol"
+    },
+    {
+        "ip": "69.69.6234",
+        "name": "dev",
+        "tld": "dev"
+    },
+    {
+        "ip": "73.200.226.181",
+        "name": "muntasir",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://github.com/Toaaa/buss-skibidi-sigma/",
+        "name": "skibidi",
+        "tld": "sigma"
+    },
+    {
+        "ip": "77.221.158.223",
+        "name": "chat",
+        "tld": "now"
+    },
+    {
+        "ip": "185.223.28.40",
+        "name": "niko",
+        "tld": "lol"
+    },
+    {
+        "ip": "https://github.com/alexandre-lavoie/pwn.root",
+        "name": "pwn",
+        "tld": "root"
+    },
+    {
+        "ip": "127.0.0.1",
+        "name": "thisisnota",
+        "tld": "scam"
+    },
+    {
+        "ip": "https://twiz.lol",
+        "name": "twiz",
+        "tld": "fr"
+    },
+    {
+        "ip": "127.3.1.21",
+        "name": "meow",
+        "tld": "lol"
+    },
+    {
+        "ip": "http://arachi.network/",
+        "name": "arachi",
+        "tld": "dev"
+    },
+    {
+        "ip": "172.67.191.248",
+        "name": "cornhub",
+        "tld": "sigma"
+    },
+    {
+        "ip": "http://catmaker.xyz/",
+        "name": "cat",
+        "tld": "lol"
+    },
+    {
+        "ip": "http://roblox.com",
+        "name": "roblox",
+        "tld": "rizz"
+    },
+    {
+        "ip": "https://buss.whatdidyouexpect.eu",
+        "name": "lmao",
+        "tld": "web"
+    },
+    {
+        "ip": "https://github.com/1-creare-1/webx-blog/tree/main",
+        "name": "creare",
+        "tld": "dev"
+    },
+    {
+        "ip": "http://minecraft.net",
+        "name": "fortnite",
+        "tld": "rizz"
+    },
+    {
+        "ip": "https://github.com/JakobHuemer/testingsite",
+        "name": "youtube",
+        "tld": "fr"
+    },
+    {
+        "ip": "https://neoiscool.github.io/",
+        "name": "neo",
+        "tld": "rizz"
+    },
+    {
+        "ip": "127.0.0.1",
+        "name": "brudderbot",
+        "tld": "rizz"
+    },
+    {
+        "ip": "1.1.1.1",
+        "name": "twitter",
+        "tld": "sigma"
+    },
+    {
+        "ip": "https://azazelcodes.github.io/",
+        "name": "azazel",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://wulcn.github.io/funnywebsite/",
+        "name": "vivean",
+        "tld": "uwu"
+    },
+    {
+        "ip": "https://github.com/Khaoz-Topsy/buss-kurt.dev",
+        "name": "kurt",
+        "tld": "dev"
+    },
+    {
+        "ip": "136.54.105.139",
+        "name": "ellesper",
+        "tld": "web"
+    },
+    {
+        "ip": "0.0.0.0",
+        "name": "cat",
+        "tld": "uwu"
+    },
+    {
+        "ip": "https://github.com/PenguinGamingPL/bussinwebsite",
+        "name": "google",
+        "tld": "btw"
+    },
+    {
+        "ip": "https://github.com/Sakura-sx/x/",
+        "name": "x",
+        "tld": "dev"
+    },
+    {
+        "ip": "https://github.com/1-creare-1/webx-search.it",
+        "name": "search",
+        "tld": "it"
+    },
+    {
+        "ip": "https://mstrv.pl",
+        "name": "mstrv",
+        "tld": "uwu"
+    },
+    {
+        "ip": "https://youtube.com",
+        "name": "lordimmaculate",
+        "tld": "mf"
+    },
+    {
+        "ip": "https://github.com/CatalystDevOrg/Website-WEBX",
+        "name": "getcatalyst",
+        "tld": "rizz"
+    },
+    {
+        "ip": "70.112.88.82",
+        "name": "violets-purgatory",
+        "tld": "uwu"
+    },
+    {
+        "ip": "185.223.28.40",
+        "name": "niko",
+        "tld": "root"
+    },
+    {
+        "ip": "https://github.com/AstralVRZ/astral.rizz",
+        "name": "astral",
+        "tld": "rizz"
+    }
+]

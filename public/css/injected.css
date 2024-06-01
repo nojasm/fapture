@@ -1,0 +1,40 @@
+@font-face {
+    font-family: Noto Sans;
+    src: url("/res/NotoSans-VariableFont_wdth,wght.ttf");
+}
+
+body {
+    background-color: #242424;
+    font-family: Noto Sans;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 5px;
+}
+
+* {
+    color: white;
+}
+
+p {
+    font-size: 20px;
+    margin: 5px;
+}
+
+input {
+    font-family: Noto Sans;
+    color: white;
+    background-color: transparent;
+    outline: none;
+    border: 2px solid #585858;
+}
+
+button {
+    color: white;
+    background-color: #393939;
+    border: none;
+    border-radius: 10px;
+
+    width: fit-content;
+    padding: 10px;
+}
