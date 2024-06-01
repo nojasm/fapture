@@ -1,5 +1,7 @@
 # FAPTURE
+
 ![Fapture Logo](/res/fapture-logo-small.png)
+
 The Web-Based viewer for buss:// Websites. See [https://github.com/face-hh/webx/] for more information about webx and buss://.
 
 # Getting started
