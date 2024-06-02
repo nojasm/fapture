@@ -1,5 +1,8 @@
 const express = require('express')
 
+const Nutter = require("./nutter").Nutter;
+const nut = new Nutter();
+
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
@@ -126,29 +129,6 @@ class PageCacher {
 		this.pages = {};  // "ip": {page}
 		this.cachedDefaultBranches = {};  // "username/repo": "branch"
 	}
-
-	getNewestRepoCommit(username, repo, cb) {
-		//console.log("https://api.github.com/repos/" + username + "/" + repo + "/commits");
-		if (username + "/" + repo in this.cachedDefaultBranches) {
-			console.log("Getting default branch of", username + "/" + repo, "from cache");
-			cb(this.cachedDefaultBranches[username + "/" + repo]);
-		} else {
-			console.log("Getting default branch of", username + "/" + repo, "from GitHub API");
-			fetch("https://api.github.com/repos/" + username + "/" + repo + "/commits").then(res => {
-				res.json().then(json => {
-					this.cachedDefaultBranches[username + "/" + repo] = json[0].sha;
-					console.log("  =>", json[0].sha);
-					cb(json[0].sha);
-				}).catch((err) => {
-					console.log("  => failed");
-					cb(null);
-				});
-			}).catch((err) => {
-				console.log("  => failed");
-				cb(null);
-			});
-		}
-	}
 	
 	getFileFromGitHub(username, repo, path, cb) {
 		console.log("{GITHUB} Downloading file from", username, repo, path);
@@ -156,7 +136,11 @@ class PageCacher {
 			fetch("https://raw.githubusercontent.com/" + username + "/" + repo + "/" + commit + "/" + path).then(res => {
 				res.text().then(data => {
 					cb(data);
+				}).catch((err) => {
+					cb(null);
 				});
+			}).catch((err) => {
+				cb(null);
 			});
 		});
 	}
@@ -189,117 +173,8 @@ class PageCacher {
 		}
 	}
 
-	selectorIsTag(sel) {
-		return [
-			"body", "head", "p", "h1", "h2", "h3", "h4", "h5", "h6", "input"
-		].includes(sel);
-	}
-
 	convertCSSPPKeyValue(key, value) {
-		let converted = {};  // Rules in "key: value" format
-
-		if (key == "direction") {
-			converted = {
-				"display": "flex",
-				"flex-direction": value
-			};
-		} else if (key == "align-items") {
-			converted = {
-				"display": "flex",
-				"align-items": value
-			};
-		} else if (key == "line-height") {
-		} else if (key == "wrap") {
-		} else if (key == "underline") {
-		} else if (key == "underline-color") {
-		} else if (key == "overline") {
-		} else if (key == "overline-color") {
-		} else if (key == "strikethrough") {
-		} else if (key == "strikethrough-color") {
-		} else if (["width", "height", "border-radius", "line-height", "color", "background-color",
-			"font-family", "font-weight", "underline", "margin-top", "margin-bottom", "margin-left",
-			"margin-right", "padding", "opacity", "gap", "font-size", "font-style", "border-style",
-			"border-color", "border-width"].includes(key)) {
-			converted = {[key]: value};
-		} else {
-			console.error("INVALID CSS KEY/VALUE PAIR:", key, value);
-		}
-
-		return converted;
-	}
-
-	cssppToCSS(css, cb) {
-		let cssData = [];  // [{selector: "...", rules: {"...": "..."}}]
-
-		let mode = "read_selector";
-		let currentSelector = "";
-		let currentKey = "";
-		let currentValue = "";
-
-		css.split("").forEach((char) => {
-			// Ignore whitespace if not currently in value
-			if (mode != "read_rule_value" && (char == "" || char == "\n" || char == " " || char == "\t" || char == "\r"))
-				return;
-			
-			if (mode == "read_selector") {
-				if (char.match(/[a-zA-Z0-9\-_]/)) {
-					currentSelector += char;
-				} else if (char == "{") {
-					if (!this.selectorIsTag(currentSelector))
-						currentSelector = "." + currentSelector;
-
-					cssData.push({
-						selector: currentSelector,
-						rules: {}
-					});
-					currentSelector = "";
-					mode = "read_rule_key";
-				} else {
-					console.error("ERROR when reading css data. Character >", char, "< in mode 'read_selector'");
-				}
-			} else if (mode == "read_rule_key") {
-				if (char.match(/[a-zA-Z0-9\-_]/)) {
-					currentKey += char;
-				} else if (char == "}") {
-					mode = "read_selector";
-				} else if (char == ":") {
-					mode = "read_rule_value";
-				}
-			} else if (mode == "read_rule_value") {
-				if (char == ";" || char == "}") {
-					currentValue = currentValue.trimStart();
-					
-					if (currentKey == "gap" && currentValue.match(/[0-9]+/))
-						currentValue += "px";
-					
-					// Add rules and overwrite old rule keys of that selector if needed
-					let rules = this.convertCSSPPKeyValue(currentKey, currentValue);
-					Object.entries(rules).forEach((rule) => {
-						cssData[cssData.length - 1].rules[rule[0]] = rule[1];
-					});
-
-					mode = "read_rule_key";
-					currentKey = "";
-					currentValue = "";
-					
-				} else {
-					currentValue += char
-				}
-			}
-		});
-
-		let donecss = "";
-		cssData.forEach((selector) => {
-			donecss += selector.selector + " {" + "\n";
-			Object.entries(selector.rules).forEach((rule) => {
-				donecss += "\t" + rule[0] + ": " + rule[1] + ";" + "\n";
-			});
-			donecss += "}" + "\n\n";
-		});
-
-		cb(donecss);
-
-		//fs.writeFileSync("cumverted.css", donecss);
+		
 	}
 
 	async getWebImagePathSync(domain, img) {
@@ -313,82 +188,9 @@ class PageCacher {
 		
 		page.rawFiles["index.html"] = "<p>nothing in here</p>";
 
-		let lines = htmlpp.split("\n");
-		let htmlppCleared = "";
-		lines.forEach((line) => {
-			if (line.startsWith("<script href=") && line.endsWith(" />"))
-				line = line.replace(" />", " ></script>");
 		
-			htmlppCleared += line + "\n";
-		});
 
-		htmlpp = htmlpp.replaceAll(" />", "  /></script>");
-
-		const dom = new JSDOM(htmlpp);
-
-		let cssFilesToLoad = [];
-		dom.window.document.head.childNodes.forEach((node) => {
-			if (node.tagName == "TITLE") {
-				page.meta.title = node.textContent;
-			} else if (node.tagName == "LINK") {
-				//page.meta.title = node.innerText;
-				let href = node.getAttribute("href")
-				if (href.endsWith(".css")) {
-					// Load corresponding CSS file
-					if (domain.host == "github") {
-						let url = "https://raw.githubusercontent.com/" + domain.github_username + "/" + domain.github_repo + "/main/styles.css";
-						//webFileCacher.getFile("")
-						cssFilesToLoad.push(url);
-					}
-				} else if (href.endsWith(".png") || href.endsWith(".jpg")) {
-					console.log("PAGE LOGO", href);
-				}
-			} else if (node.tagName == "META") {
-				//page.meta.title = node.innerText;
-				let key = node.getAttribute("name");
-				let value = node.getAttribute("content");
-				
-				if (key == "theme-color")
-					page.meta.themeColor = value;
-				else if (key == "description")
-					page.meta.description = value;
-			
-			} else if (node.tagName == "SCRIPT") {
-				//page.meta.title = node.innerText;
-			}
-		});
-
-		let multi = new MultiCallback(cssFilesToLoad, (multi, i) => {
-			webFileCacher.getFile(cssFilesToLoad[i], (content) => {
-				this.cssppToCSS(content, (css) => {
-					multi.setResult(i, css);
-					console.log("RENDERED FILE", cssFilesToLoad[i], "AS", css);
-				});
-			});
-		}, (values) => {
-			// Add converted CSS to head as a style
-			let style = dom.window.document.createElement("style");
-			style.innerHTML = values.join("\n\n");
-			dom.window.document.body.appendChild(style);
-
-			page.processedFiles["index.html"] = dom.window.document.body.outerHTML;
-			finalCallback(page);
-		});
-		
 		return;
-	}
-
-	resolveIP(ip) {
-		let data = {};
-		if (ip.startsWith("https://github.com/")) {
-			data.host = "github";
-			data.github_username = ip.substr("https://github.com/".length).split("/")[0];
-			data.github_repo = ip.substr("https://github.com/".length).split("/")[1];
-		} else {
-			console.error("Invalid IP host: " + ip);
-		}
-
-		return data;
 	}
 
 	// Executes callback with a <Page>-Object and loads and caches
@@ -402,6 +204,11 @@ class PageCacher {
 			console.log("  Loading index.html from github @ " + username + "/" + repo);
 
 			this.getHTMLPPFileFromGitHub(username, repo, (htmlpp) => {
+				if (htmlpp == null) {
+					cb(null);
+				}
+
+				
 				console.log("=> Converting to standard HTML");
 				this.createPageFromHTMLPP(domain, htmlpp, (page) => {
 					page.rawbody = htmlpp;
@@ -467,8 +274,193 @@ class PageCacher {
 	}
 };
 
-var pages = new PageCacher(new Storage("cache/pages.json"));
-var webFileCacher = new WebFileCacher(new Storage("cache/webfiles.json"));
+class FaptureDomain {
+	constructor(ip, name, tld) {
+		this.ip = ip;
+		this.name = name;
+		this.tld = tld;
+
+		/*
+		if (ip.startsWith("https://github.com/")) {
+			this.host = "github";
+			this.github_username = ip.substr("https://github.com/".length).split("/")[0];
+			this.github_repo = ip.substr("https://github.com/".length).split("/")[1];
+			
+			this.githubGetLatestCommit((commit) => {
+				if (commit == null) console.error("Unable to get latest commit for IP: " + this.ip);
+				else this.github_latest_commit = commit;
+			});
+		} else {
+			console.error("Invalid IP host: " + ip);
+		}
+		*/
+	}
+
+	githubGetLatestCommit(cb) {
+		if (this.host == "github") {
+			//console.log("Getting default branch of", username + "/" + repo, "from GitHub API");
+			fetch("https://api.github.com/repos/" + this.github_username + "/" + this.github_repo + "/commits").then(res => {
+				res.json().then(json => {
+					//console.log("  =>", json[0].sha);
+					cb(json[0].sha || null);
+				}).catch((err) => {
+					//console.log("  => failed");
+					cb(null);
+				});
+			}).catch((err) => {
+				//console.log("  => failed");
+				cb(null);
+			});
+		} else {
+			console.error("Unable to get latest commit as this domain (" + this.ip + ") is not hosted in a GitHub Repository");
+		}
+	}
+}
+
+// A FapturePage object represents an entire registered domain, including
+// all files like index.html and lua scripts
+class FapturePage {
+	constructor(domain, fileGetterCallback) {
+		this.domain = domain;  // FaptureDomain
+		this.fileGetter = fileGetter;  // For retreiving files like styles.css and lua scripts
+		this.files = {};  // Converted files (eg. HTML)
+		this.rawFiles = {};  // Unconverted files (eg. HTML++)
+	}
+	
+	getProcessedIndexHTML(cb) {
+		cb("<h1>works!</h1>");
+	}
+}
+
+// A helper class that represents a collection of files, like those downloaded
+// from a GitHub repository for example
+class FaptureCollection {
+	constructor(domain) {
+		this.files = {};  // path: content
+	}
+
+	addFile(path, content) {
+		this.files[path] = content;
+	}
+
+	getFile(path) {
+		return this.files[path];
+	}
+}
+
+class FapturePageCache {
+	constructor(storageFile) {
+		this.storageFile = storageFile;
+		if (fs.existsSync(this.storageFile))
+			this.pages = JSON.parse(fs.readFileSync(this.storageFile));
+		else {
+			this.pages = {};  // {"name.tld": <FaptureCollection>}
+			this.save();
+		}
+	}
+
+	// If not cached yet, this method downloads all files from a host (like GitHub) and caches them.
+	// This returns raw, unprocessed HTML++, CSS and Lua files as a FaptureCollection.
+	getFilesFromDomain(domain, callback) {
+		let url = domain.name + "." + domain.tld;
+
+		if (url in this.pages) {
+			// Page is cached already
+			callback(this.pages[url]);
+		} else {
+			// Cache page first
+			let collection = this.collectFilesFromDomain(domain);
+			this.pages[url] = collection;	
+
+			callback(this.pages[url]);
+		}
+	}
+
+	// Collects all files from a domain like https://www.github.com/xyz/xyz and returns
+	// them as a FaptureCollection
+	collectFilesFromDomain(domain, callback) {
+		let collection = new FaptureCollection(domain);
+		collection.addFile("index.html", "<p>wtf?!</p>");
+		callback(collection);
+	}
+
+	save() {
+		fs.writeFileSync(this.storageFile, JSON.stringify(this.pages));
+	}
+}
+
+// Helper class to keep track of all domains
+class FaptureDomainCache {
+	constructor(storageFile) {
+		this.storageFile = storageFile;
+		if (fs.existsSync(this.storageFile)) {
+			this.domains = JSON.parse(fs.readFileSync(this.storageFile));
+		} else {
+			this.domains = {};  // {"ip": <FaptureDomain>, ...}
+		}
+	}
+	
+	loadFromFile(path) {
+		let data = JSON.parse(fs.readFileSync(path));
+		data.forEach((entry) => {
+			console.log("Registered", entry.ip, entry.name, entry.tld);
+			this.domains[entry.ip] = new FaptureDomain(entry.ip, entry.name, entry.tld);
+			if (entry.host == "github") console.log(" =>", entry.github_username, entry.github_repo);
+		});
+	}
+
+	// Returns a FapturePage or null if not cached
+	getDomain(ip) {
+		if (ip in this.domains) return this.domains[ip];
+		else return null;
+	}
+
+	getFaptureDomain(name, tld) {
+		let domain = null;
+		Object.keys(this.domains).forEach((ip) => {
+			if (this.domains[ip].name == name && this.domains[ip].tld == tld) {
+				domain = this.domains[ip];
+			}
+		});
+
+		return domain;
+	}
+
+	// Caches and creates a new FaptureDomain in the storage based on the IP, Name and TLD
+	registerDomain(ip, name, tld) {
+		let domain = new FaptureDomain(ip, name, tld);
+		this.domains[ip] = domain;
+
+		this.save();
+	}
+
+	// Saves all cached domains to the storage file (Happens automatically in registerDomain())
+	save() {
+		fs.writeFileSync(this.storageFile, JSON.stringify(this.domains));
+	}
+}
+
+class Fapture {
+	constructor() {
+		
+	}
+
+	// Takes in a FaptureCollection and uses its "index.html" as well as other files from there
+	// to render a browser HTML index.html including style and javascript
+	renderHTMLFromFileCollection(collection, callback) {
+		let htmlpp = collection.getFile("index.html");
+	}
+}
+
+var fapture = new Fapture();
+
+var faptureDomainCache = new FaptureDomainCache("cache/fapture-domains.json");
+faptureDomainCache.loadFromFile("cache/domains.json");
+
+var fapturePageCache = new FapturePageCache("cache/fapture-pages.json");
+
+//var pages = new PageCacher(new Storage("cache/pages.json"));
+//var webFileCacher = new WebFileCacher(new Storage("cache/webfiles.json"));
 
 app.get("/", (req, res) => {
 	res.sendFile(root + "/index.html")
@@ -484,8 +476,22 @@ app.post("/search", (req, res) => {
 	let name = url.split(".")[0];
 	let tld = url.split(".")[1];
 
+	let domain = faptureDomainCache.getFaptureDomain(name, tld);
+	if (domain != null) {
+		fapturePageCache.getFilesFromDomain(domain, (fileCollection) => {
+			fapture.renderHTMLFromFileCollection(fileCollection, (processedFiles) => {
+				res.send(processedFiles.getFile("index.html"));
+			});
+		});
+	} else {
+		res.send(fapture.errorPage());
+	}
+
+	/*
 	domains.forEach((domain) => {
 		if (domain.name == name && domain.tld == tld) {
+			if (faptureDomainCache.hasPageStored(domaini))
+
 			console.log("Loading buss://" + domain.name + "." + domain.tld);
 			pages.getPageFromIP(domain.ip, (page) => {
 				res.send({
@@ -495,6 +501,7 @@ app.post("/search", (req, res) => {
 			});
 		}
 	});
+	*/
 });
 
 app.get(/^.*\.(html|css|js|png|jpg|jpeg|svg|ico|ttf)/, (req, res) => {
