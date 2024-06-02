@@ -33,6 +33,33 @@ body {
 	padding: 20px 20px 0 20px;
 }
 
+#tab-new {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	opacity: 0.6;
+	transition: 100ms opacity;
+	
+	background-color: #777;
+	border-radius: 10px;
+	
+	padding: 5px;
+	margin: 5px;
+
+	cursor: pointer;
+	width: 30px;
+	box-sizing: border-box;
+}
+
+#tab-new:hover {
+	opacity: 1.0;
+}
+
+#tab-new > img {
+	height: 100%;
+}
+
 .tab {
 	display: flex;
 	flex-direction: row;

@@ -95,7 +95,8 @@ function createNewTab() {
     tabEl.appendChild(tabIconEl);
     tabEl.appendChild(tabTextEl);
     tabEl.appendChild(tabCloseEl);
-    document.getElementById("tabs").appendChild(tabEl);
+
+    document.getElementById("tabs").insertBefore(tabEl, document.getElementById("tab-new"));
 
     // Create page
     let pageEl = document.createElement("div");
@@ -182,6 +183,15 @@ search.addEventListener("keydown", (event) => {
         });
     }
 });
+
+document.getElementById("tab-new").onclick = () => {
+    currentTab = createNewTab();
+    doSearch("dingle.it", (page) => {
+        reloadPage(lastTab, page);
+        switchTab(lastTab);
+        stopLoadingAnimation();
+    });
+};
 
 startLoadingAnimation();
 let lastTab = createNewTab();
