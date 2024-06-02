@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const { JSDOM } = require("jsdom");
+const readlineSync = require("readline-sync");
 
 const app = express();
 
@@ -23,7 +24,7 @@ class FaptureDomain {
     }
 }
 
-class DomainCache {
+/*class DomainCache {
     constructor() {
         this.domains = {};  // "name.tld": <FaptureDomain>
 
@@ -36,6 +37,53 @@ class DomainCache {
 
     getDomainFromURL(name, tld, callback) {
         callback(this.domains[name + "." + tld]);
+    }
+}*/
+
+class DNS {
+    constructor(url, refreshSeconds) {
+        this.url = url;
+        this.lastRefresh = null;
+        this.refreshMS = refreshSeconds * 1000;
+        this.domains = [];
+
+        this.getDomains((domains) => {
+            this.domains = domains;
+        });
+    }
+
+    getDomains(callback) {
+        let now = Date.now();
+        if (this.lastRefresh == null || (now - this.lastRefresh) > this.refreshMS) {
+            this.lastRefresh = now;
+            if (fs.existsSync(this.url)) {
+                this.domains = JSON.parse(fs.readFileSync(this.url));
+                callback(this.domains);
+            } else {
+                fetchFile(this.url, (content) => {
+                    this.domains = JSON.parse(content);
+                    console.log("Refreshed " + this.domains.length + " domains");
+                    callback(this.domains);
+                });
+            }
+        } else {
+            callback(this.domains);
+        }
+    }
+
+    getDomainFromURL(name, tld, callback) {
+        let domain = null;
+        this.domains.forEach((dom) => {
+            if (dom.name == name && dom.tld == tld) {
+                domain = new FaptureDomain(dom.ip, dom.name, dom.tld);
+            }
+        });
+
+        //console.log(this.domains, "could not find", name, tld);
+
+        console.log("Resolved", name + "." + tld, "to", domain.ip);
+
+        callback(domain);
     }
 }
 
@@ -69,11 +117,6 @@ class RawFileCache {
     save() {
         fs.writeFileSync(this.storageFile, JSON.stringify(this.webfiles));
     }
-}
-
-// A Collection is a collection of files
-class Collection {
-
 }
 
 // A bundle is a compiled collection of all files from a page into a single
@@ -122,15 +165,14 @@ function fetchFile(url, callback) {
 }
 
 function getNewestRepoCommit(username, repo, callback) {
-    /*
     fetch("https://api.github.com/repos/" + username + "/" + repo + "/commits").then((res) => {
         res.json().then((json) => {
             callback(json[0].sha);
         });
-    });*/
+    });
 
-    console.log("JUST USE COMMIT main WTF");
-    callback("main");
+    //console.log("JUST USE COMMIT main WTF");
+    //callback("main");
 }
 
 function selectorIsTag(sel) {
@@ -151,6 +193,11 @@ function CSSPP2CSS(csspp, cb) {
         // Ignore whitespace if not currently in value
         if (mode != "read_rule_value" && (char == "" || char == "\n" || char == " " || char == "\t" || char == "\r"))
             return;
+    
+        if (mode == "ignore_till_semicolon") {
+            if (char == ";") mode = "read_selector";
+            return;
+        }
         
         if (mode == "read_selector") {
             if (char.match(/[a-zA-Z0-9\-_]/)) {
@@ -165,6 +212,8 @@ function CSSPP2CSS(csspp, cb) {
                 });
                 currentSelector = "";
                 mode = "read_rule_key";
+            } else if (char == "@") {
+                mode = "ignore_till_semicolon";
             } else {
                 console.error("ERROR when reading css data. Character >", char, "< in mode 'read_selector'");
             }
@@ -260,6 +309,7 @@ function convertHTMLPP2HTML(domain, htmlpp, fileGetterCallback, cb) {
     let meta = {};
 
     let cssDataToAppend = "";
+    let luaScriptsToRun = [];
     dom.window.document.head.childNodes.forEach((node) => {
         if (node.tagName == "TITLE") {
             meta.title = node.textContent;
@@ -286,13 +336,23 @@ function convertHTMLPP2HTML(domain, htmlpp, fileGetterCallback, cb) {
         
         } else if (node.tagName == "SCRIPT") {
             //meta.title = node.innerText;
+            console.log("Including script");
+            let href = node.getAttribute("src");
+            if (href.endsWith(".lua")) {
+                fileGetterCallback(href, (content) => {
+                    luaScriptsToRun.push(content);
+                });
+            }
         }
     });
 
+    // please help we have to wait for links and scripts to be included
     setTimeout(() => {
         let stylesEl = dom.window.document.createElement("style");
         stylesEl.innerHTML = cssDataToAppend;
         dom.window.document.body.appendChild(stylesEl);
+
+        // TODO: ADD LUA-TO-JS STUFF HERE
 
         cb(meta, dom.window.document.body.innerHTML);
     }, 300);
@@ -327,9 +387,38 @@ function createBundle(domain, fileGetterCallback, callback) {
     });
 }
 
-var domainCache = new DomainCache();
-var rawFileCache = new RawFileCache("cache/rawfiles.json");
-var bundleCache = new BundleCache("cache/bundles.json");
+var config = {};
+if (fs.existsSync("config.json")) {
+    config = JSON.parse(fs.readFileSync("config.json"));
+} else {
+    console.log("Hi! This seems to be the first time you use the FAPTURE-Server software.\nLets set some things up for you.");
+    console.log("Answer the questions or just press ENTER to use the default option inside of the brackets.\n");
+    console.log("[1] Where do you want your cached files to be stored?");
+
+    let cache = readlineSync.question("  (cache): ");
+    if (cache == "") config.cacheDir = root + "/" + "cache";
+    else config.cacheDir = root + "/" + cache;
+    if (!fs.existsSync(config.cacheDir)) fs.mkdirSync(config.cacheDir);
+
+    console.log("[2] What DNS do you want to use? (You can also enter a local json file here)");
+    let dnsUrl = readlineSync.question("  (https://api.buss.lol/domains): ");
+    if (dnsUrl == "") config.dnsUrl = "https://api.buss.lol/domains";
+    else config.dnsUrl = dnsUrl;
+
+    console.log("[3] How often do you want the DNS to refresh its database? (Seconds)");
+    let dnsRefresh = readlineSync.question("  (60): ");
+    if (dnsRefresh == "") config.dnsRefresh = 60;
+    else config.dnsRefresh = parseInt(dnsRefresh);
+
+    console.log("\nEverything is ready. We will save your configuration in 'config.json'\n");
+
+    fs.writeFileSync("config.json", JSON.stringify(config));
+}
+
+console.log("Starting the server...");
+
+var dns = new DNS(config.dnsUrl, config.dnsRefresh);  // https://api.buss.lol/domains
+var bundleCache = new BundleCache(config.cacheDir + "/bundles.json");
 
 app.get("/", (req, res) => {
     res.sendFile(root + "/index.html");
@@ -347,7 +436,7 @@ app.post("/search", (req, res) => {
 
     let url = name + "." + tld;
 
-    domainCache.getDomainFromURL(name, tld, (faptureDomain) => {
+    dns.getDomainFromURL(name, tld, (faptureDomain) => {
         bundleCache.isCached(url, (is) => {
             if (false && is) {
                 // Page is already bundled, so just send that
@@ -401,4 +490,5 @@ app.get(/^.*\.(html|css|js|png|jpg|jpeg|svg|ico|ttf)/, (req, res) => {
 
 app.listen(3000, () => {
     console.log("Running on port 3000.");
+    console.log("http://localhost:3000/");
 });

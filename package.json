@@ -2,6 +2,8 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
-    "jsdom": "^24.1.0"
+    "jsdom": "^24.1.0",
+    "lua-in-js": "^2.2.4",
+    "readline-sync": "^1.4.10"
   }
 }
