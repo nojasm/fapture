@@ -61,12 +61,7 @@ function populateTab(page, tabIndex) {
 
     tabTextEl.innerText = page.meta.title || "";
 
-    let injectedCSS = document.createElement("link");
-    injectedCSS.rel = "stylesheet";
-    injectedCSS.href = "/css/injected.css";
-
-    document.getElementsByClassName("frame")[tabIndex].contentDocument.body.innerHTML = page.body;
-    document.getElementsByClassName("frame")[tabIndex].contentDocument.head.appendChild(injectedCSS);
+    document.getElementsByClassName("frame")[tabIndex].contentDocument.body.innerHTML = page.html;
     document.getElementsByClassName("content")[tabIndex].style.backgroundColor = tabs[tabIndex].meta.themeColor || "white";
 }
 
@@ -96,6 +91,12 @@ function createNewTab() {
 
     pageEl.appendChild(frameEl);
     document.getElementById("main").appendChild(pageEl);
+
+    
+    let injectedCSS = document.createElement("link");
+    injectedCSS.rel = "stylesheet";
+    injectedCSS.href = "/css/injected.css";
+    document.getElementsByClassName("frame")[index].contentDocument.head.appendChild(injectedCSS);
 
     return index;
 }
