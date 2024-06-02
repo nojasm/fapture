@@ -144,6 +144,8 @@ search.addEventListener("keydown", (event) => {
         doSearch(event.target.value);
 });
 
+doSearch("dingle.it");
+
 let lastTab = createNewTab();
 populateTab(emptyPage, lastTab);
 switchTab(lastTab);

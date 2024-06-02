@@ -81,7 +81,8 @@ class DNS {
 
         //console.log(this.domains, "could not find", name, tld);
 
-        console.log("Resolved", name + "." + tld, "to", domain.ip);
+        if (domain == null) console.log("Could not resolve " + name + "." + tld);
+        else console.log("Resolved", name + "." + tld, "to", domain.ip);
 
         callback(domain);
     }
@@ -420,8 +421,18 @@ console.log("Starting the server...");
 var dns = new DNS(config.dnsUrl, config.dnsRefresh);  // https://api.buss.lol/domains
 var bundleCache = new BundleCache(config.cacheDir + "/bundles.json");
 
+console.log("Loaded", dns.domains.length, "domains");
+
+var errorPage = new Bundle();
+errorPage.meta = {
+    title: "Error :("
+};
+errorPage.html = "<h1>Could not locate domain: {DOMAIN}</h1><style>h1 {font-family: monospace; margin: 50px; color: #eed} body {background-color: #603030}</style>";
+
 app.get("/", (req, res) => {
-    res.sendFile(root + "/index.html");
+    let randomDomain = dns.domains[Math.floor(Math.random() * dns.domains.length)];
+    let index = fs.readFileSync(root + "/index.html").toString().replaceAll("{RANDOMDOMAIN}", randomDomain.name + "." + randomDomain.tld);
+    res.send(index);
 });
 
 app.post("/search", (req, res) => {
@@ -437,50 +448,57 @@ app.post("/search", (req, res) => {
     let url = name + "." + tld;
 
     dns.getDomainFromURL(name, tld, (faptureDomain) => {
-        bundleCache.isCached(url, (is) => {
-            if (false && is) {
-                // Page is already bundled, so just send that
-                res.send(bundleCache.bundles[url]);
-            } else {
-                // Page needs to be retrieved and bundled first
-                if (faptureDomain.host == "github") {
-                    getNewestRepoCommit(faptureDomain.github_username, faptureDomain.github_repo, (commit) => {
-                        let baseURL = "https://raw.githubusercontent.com/" + faptureDomain.github_username + "/" + faptureDomain.github_repo + "/" + commit;
-
-                        console.log("Loading from", baseURL);
-
-                        createBundle(faptureDomain, (path, callback) => {
-                            //console.log("{BUNDLE} Bundler asks for: " + path);
-                            /*if (path == "index.html") {
-                                fetchFile(baseURL + "/index.html", (content) => {
-                                    callback(content);
-                                });
-                            } else if (path == "styles.css") {
-                                callback("* { background-color: pink }");
-                            }*/
-                            
-                            console.log("  Bundler is loading", path);
-
-                            if (path.endsWith(".css")) {
-                                fetchFile(baseURL + "/" + path, (csspp) => {
-                                    CSSPP2CSS(csspp, (css) => {
-                                        callback(css);
-                                    });
-                                });
-                            } else {
-                                fetchFile(baseURL + "/" + path, callback);
-                            }
-                        }, (bundle) => {
-                            console.log("Bundled", url);
-                            bundleCache.cache(url, bundle);
-                            res.send(bundle);
-                        });
-                    });
+        if (faptureDomain == null) {
+            // Failed to locate domain
+            let ep = structuredClone(errorPage);
+            ep.html = ep.html.replaceAll("{DOMAIN}", "buss://" + name + "." + tld);
+            res.send(ep);
+        } else {
+            bundleCache.isCached(url, (is) => {
+                if (false && is) {
+                    // Page is already bundled, so just send that
+                    res.send(bundleCache.bundles[url]);
                 } else {
-                    console.log("Cannot load from host '" + faptureDomain.ip + "' yet");
+                    // Page needs to be retrieved and bundled first
+                    if (faptureDomain.host == "github") {
+                        getNewestRepoCommit(faptureDomain.github_username, faptureDomain.github_repo, (commit) => {
+                            let baseURL = "https://raw.githubusercontent.com/" + faptureDomain.github_username + "/" + faptureDomain.github_repo + "/" + commit;
+    
+                            console.log("Loading from", baseURL);
+    
+                            createBundle(faptureDomain, (path, callback) => {
+                                //console.log("{BUNDLE} Bundler asks for: " + path);
+                                /*if (path == "index.html") {
+                                    fetchFile(baseURL + "/index.html", (content) => {
+                                        callback(content);
+                                    });
+                                } else if (path == "styles.css") {
+                                    callback("* { background-color: pink }");
+                                }*/
+                                
+                                console.log("  Bundler is loading", path);
+    
+                                if (path.endsWith(".css")) {
+                                    fetchFile(baseURL + "/" + path, (csspp) => {
+                                        CSSPP2CSS(csspp, (css) => {
+                                            callback(css);
+                                        });
+                                    });
+                                } else {
+                                    fetchFile(baseURL + "/" + path, callback);
+                                }
+                            }, (bundle) => {
+                                console.log("Bundled", url);
+                                bundleCache.cache(url, bundle);
+                                res.send(bundle);
+                            });
+                        });
+                    } else {
+                        console.log("Cannot load from host '" + faptureDomain.ip + "' yet");
+                    }
                 }
-            }
-        });
+            });
+        }
     });
 });
 
