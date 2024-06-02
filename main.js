@@ -88,7 +88,7 @@ class DNS {
     }
 }
 
-class RawFileCache {
+/*class RawFileCache {
     constructor(storageFile) {
         this.storageFile = storageFile;
 
@@ -118,7 +118,7 @@ class RawFileCache {
     save() {
         fs.writeFileSync(this.storageFile, JSON.stringify(this.webfiles));
     }
-}
+}*/
 
 // A bundle is a compiled collection of all files from a page into a single
 // HTML file including CSS and JavaScript code
@@ -166,6 +166,9 @@ function fetchFile(url, callback) {
 }
 
 function getNewestRepoCommit(username, repo, callback) {
+    callback("main");
+    return;
+
     fetch("https://api.github.com/repos/" + username + "/" + repo + "/commits").then((res) => {
         res.json().then((json) => {
             callback(json[0].sha);
@@ -322,8 +325,10 @@ function convertHTMLPP2HTML(domain, htmlpp, fileGetterCallback, cb) {
                     console.log("GOT:", content);
                     cssDataToAppend += content + "\n\n";
                 });
-            } else if (href.endsWith(".png") || href.endsWith(".jpg")) {
-                console.log("PAGE LOGO", href);
+            } else if (href.endsWith(".png") || href.endsWith(".jpg") || href.endsWith(".jpeg") || href.endsWith(".gif") || href.endsWith(".webp")) {
+                //let ext = href.substr(0, href.lastIndexOf(href));
+                //let iconPath = config.cacheDir + "/icons/" + crypto.randomUUID() + "." + ext;
+                meta.icon = href;
             }
         } else if (node.tagName == "META") {
             //meta.title = node.innerText;
@@ -400,6 +405,7 @@ if (fs.existsSync("config.json")) {
     if (cache == "") config.cacheDir = root + "/" + "cache";
     else config.cacheDir = root + "/" + cache;
     if (!fs.existsSync(config.cacheDir)) fs.mkdirSync(config.cacheDir);
+    if (!fs.existsSync(config.cacheDir + "/icons")) fs.mkdirSync(config.cacheDir + "/icons");
 
     console.log("[2] What DNS do you want to use? (You can also enter a local json file here)");
     let dnsUrl = readlineSync.question("  (https://api.buss.lol/domains): ");
@@ -423,11 +429,16 @@ var bundleCache = new BundleCache(config.cacheDir + "/bundles.json");
 
 console.log("Loaded", dns.domains.length, "domains");
 
-var errorPage = new Bundle();
-errorPage.meta = {
-    title: "Error :("
-};
-errorPage.html = "<h1>Could not locate domain: {DOMAIN}</h1><style>h1 {font-family: monospace; margin: 50px; color: #eed} body {background-color: #603030}</style>";
+var errorPage = (message) => {
+    let b = new Bundle();
+    b.meta = {
+        title: "Error :("
+    };
+
+    b.html = "<h1>An error occured :(</h1><p>" + message + "</p><style>p {color: #bba} h1 {color: #eed} body {font-family: monospace; margin: 50px; background-color: #603030}</style>";
+    return b;
+}
+
 
 app.get("/", (req, res) => {
     let randomDomain = dns.domains[Math.floor(Math.random() * dns.domains.length)];
@@ -450,9 +461,7 @@ app.post("/search", (req, res) => {
     dns.getDomainFromURL(name, tld, (faptureDomain) => {
         if (faptureDomain == null) {
             // Failed to locate domain
-            let ep = structuredClone(errorPage);
-            ep.html = ep.html.replaceAll("{DOMAIN}", "buss://" + name + "." + tld);
-            res.send(ep);
+            res.send(errorPage("Could not locate " + name + "." + tld));
         } else {
             bundleCache.isCached(url, (is) => {
                 if (false && is) {
@@ -495,6 +504,7 @@ app.post("/search", (req, res) => {
                         });
                     } else {
                         console.log("Cannot load from host '" + faptureDomain.ip + "' yet");
+                        res.send(errorPage("Could not load files from IP " + faptureDomain.ip) + ". At this moment, only GitHub repos are supported");
                     }
                 }
             });

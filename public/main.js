@@ -31,9 +31,13 @@ function closeTab(index) {
         switchTab(tabs.length - 1);
 
     if (tabs.length == 0) {
-        createNewTab();
-        populateTab(emptyPage, 0);
-        switchTab(0);
+        startLoadingAnimation();
+        let lastTab = createNewTab();
+        doSearch("dingle.it", (page) => {
+            reloadPage(lastTab, page);
+            switchTab(lastTab);
+            stopLoadingAnimation();
+        });
     }
 }
 
@@ -41,8 +45,9 @@ function populateTab(page, tabIndex) {
     tabs[tabIndex] = page;
 
     let tabEl = document.getElementsByClassName("tab")[tabIndex];
-    let tabTextEl = tabEl.childNodes[0];
-    let tabCloseEl = tabEl.childNodes[1];
+    let tabIconEl = tabEl.childNodes[0];
+    let tabTextEl = tabEl.childNodes[1];
+    let tabCloseEl = tabEl.childNodes[2];
 
     tabEl.onclick = (event) => {
         if (!event.target.classList.contains("tab"))
@@ -50,6 +55,11 @@ function populateTab(page, tabIndex) {
         
         switchTab(parseInt(event.target.getAttribute("tab-index")));
     }
+
+    console.log(page.meta);
+
+    tabIconEl.style.display = page.meta.icon == undefined ? "none" : "initial";
+    tabIconEl.src = page.meta.icon || "";
 
     tabTextEl.onclick = (event) => {
         tabEl.onclick(event);
@@ -74,10 +84,15 @@ function createNewTab() {
     tabEl.classList.add("tab");
     tabEl.setAttribute("tab-index", index);
 
+    let tabIconEl = document.createElement("img");
     let tabTextEl = document.createElement("p");
     let tabCloseEl = document.createElement("img");
     tabCloseEl.src = "/res/x-lg.svg";
 
+    tabIconEl.classList.add("tab-icon");
+    tabCloseEl.classList.add("tab-x");
+
+    tabEl.appendChild(tabIconEl);
     tabEl.appendChild(tabTextEl);
     tabEl.appendChild(tabCloseEl);
     document.getElementById("tabs").appendChild(tabEl);
@@ -101,7 +116,7 @@ function createNewTab() {
     return index;
 }
 
-function doSearch(str) {
+function doSearch(str, callback) {
     fetch("/search", {
         method: "POST",
         headers: {
@@ -112,7 +127,7 @@ function doSearch(str) {
         })
     }).then(res => {
         res.json().then(page => {
-            reloadPage(currentTab, page);
+            callback(page);
         }).catch((err) => {
             console.warn(err);
         });
@@ -135,17 +150,43 @@ function switchTab(index) {
     currentTab = tabs.length - 1;
 }
 
+function startLoadingAnimation() {
+    let icon = document.getElementById("search__icon");
+    icon.src = "/res/arrow-clockwise.svg";
+    icon.classList.add("loading-rotation-animation");
+}
+
+function stopLoadingAnimation() {
+    let icon = document.getElementById("search__icon");
+    icon.src = "/res/search.svg";
+    icon.classList.remove("loading-rotation-animation");
+}
+
 searchButton.onclick = () => {
-    doSearch(search.value);
+    if (searchButton.classList.contains("loading-rotation-animation"))
+        return;
+
+    startLoadingAnimation();
+    doSearch(search.value, (page) => {
+        reloadPage(currentTab, page);
+        stopLoadingAnimation();
+    });
 }
 
 search.addEventListener("keydown", (event) => {
-    if (event.key == "Enter")
-        doSearch(event.target.value);
+    if (event.key == "Enter") {
+        startLoadingAnimation();
+        doSearch(event.target.value, (page) => {
+            reloadPage(currentTab, page);
+            stopLoadingAnimation();
+        });
+    }
 });
 
-doSearch("dingle.it");
-
+startLoadingAnimation();
 let lastTab = createNewTab();
-populateTab(emptyPage, lastTab);
-switchTab(lastTab);
+doSearch("dingle.it", (page) => {
+    reloadPage(lastTab, page);
+    switchTab(lastTab);
+    stopLoadingAnimation();
+});

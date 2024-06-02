@@ -55,13 +55,20 @@ body {
 	font-family: monospace;
 	font-size: 15px;
 	margin: 0;
+
+	flex-grow: 1;
 }
 
-.tab > img {
+.tab-icon {
+	height: 25px;
+	margin-right: 10px;
+}
+
+.tab-x {
 	padding: 5px;
 }
 
-.tab > img:hover {
+.tab-x:hover {
 	background-color: #a55;
 	border-radius: 50%;
 	cursor: pointer;
@@ -117,12 +124,28 @@ body {
 	cursor: pointer;
 }
 
-#search__icon:hover {
+#search__icon:not(.loading-rotation-animation):hover {
 	cursor: pointer;
 	background-color: #5554;
 	border-radius: 3px;
 
 	transform: scale(1.2);
+}
+
+@keyframes rotate {
+	from {
+		rotate: 0;
+	}
+
+	to {
+		rotate: 360deg;
+	}
+}
+
+.loading-rotation-animation {
+	animation: rotate 500ms linear;
+	animation-iteration-count: infinite;
+	animation-delay: 100ms;
 }
 
 .content {
