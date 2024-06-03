@@ -56,8 +56,6 @@ function populateTab(page, tabIndex) {
         switchTab(parseInt(event.target.getAttribute("tab-index")));
     }
 
-    console.log(page.meta);
-
     tabIconEl.style.display = page.meta.icon == undefined ? "none" : "initial";
     tabIconEl.src = page.meta.icon || "";
 
@@ -148,7 +146,7 @@ function switchTab(index) {
 
     document.title = tabs[index].meta.title || "";
 
-    currentTab = tabs.length - 1;
+    currentTab = index;
 }
 
 function startLoadingAnimation() {
@@ -185,7 +183,7 @@ search.addEventListener("keydown", (event) => {
 });
 
 document.getElementById("tab-new").onclick = () => {
-    currentTab = createNewTab();
+    lastTab = createNewTab();
     doSearch("dingle.it", (page) => {
         reloadPage(lastTab, page);
         switchTab(lastTab);

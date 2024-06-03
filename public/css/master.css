@@ -84,11 +84,13 @@ body {
 	margin: 0;
 
 	flex-grow: 1;
+	pointer-events: none;
 }
 
 .tab-icon {
 	height: 25px;
 	margin-right: 10px;
+	pointer-events: none;
 }
 
 .tab-x {

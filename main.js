@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const fs = require("fs");
 const { JSDOM } = require("jsdom");
 const readlineSync = require("readline-sync");
+const { LuaFactory } = require("wasmoon");
 
 const app = express();
 
@@ -402,8 +403,8 @@ if (fs.existsSync("config.json")) {
     console.log("[1] Where do you want your cached files to be stored?");
 
     let cache = readlineSync.question("  (cache): ");
-    if (cache == "") config.cacheDir = root + "/" + "cache";
-    else config.cacheDir = root + "/" + cache;
+    if (cache == "") config.cacheDir = __dirname + "/" + "cache";
+    else config.cacheDir = __dirname + "/" + cache;
     if (!fs.existsSync(config.cacheDir)) fs.mkdirSync(config.cacheDir);
     if (!fs.existsSync(config.cacheDir + "/icons")) fs.mkdirSync(config.cacheDir + "/icons");
 

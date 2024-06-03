@@ -4,6 +4,7 @@
     "express": "^4.19.2",
     "jsdom": "^24.1.0",
     "lua-in-js": "^2.2.4",
-    "readline-sync": "^1.4.10"
+    "readline-sync": "^1.4.10",
+    "wasmoon": "^1.16.0"
   }
 }
