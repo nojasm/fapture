@@ -3,3 +3,4 @@ node_modules/
 .vs/
 .gitignore
 cache/
+config.json
