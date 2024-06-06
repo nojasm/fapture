@@ -5,15 +5,12 @@
 
 body {
     /*background-color: #242424;*/
+    color: white;
     font-family: Noto Sans;
 }
 
 h1, h2, h3, h4, h5, h6 {
     margin: 5px;
-}
-
-* {
-    color: black;
 }
 
 p {
@@ -37,4 +34,8 @@ button {
 
     width: fit-content;
     padding: 10px;
+}
+
+img {
+    width: fit-content;
 }

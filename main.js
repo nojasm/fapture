@@ -162,7 +162,11 @@ function fetchFile(url, callback) {
     fetch(url).then((res) => {
         res.text().then((text) => {
             callback(text);
+        }).catch((err) => {
+            callback(err);
         });
+    }).catch((err) => {
+        callback(err);
     });
 }
 
@@ -278,18 +282,16 @@ function convertCSSPPKeyValue(key, value) {
             "display": "flex",
             "align-items": value
         };
-    } else if (key == "line-height") {
     } else if (key == "wrap") {
-    } else if (key == "underline") {
-    } else if (key == "underline-color") {
-    } else if (key == "overline") {
-    } else if (key == "overline-color") {
-    } else if (key == "strikethrough") {
-    } else if (key == "strikethrough-color") {
+        // Ignore, just always wrap for now
+    } else if (["underline", "underline-color", "overline", "overline-color", "strikethrough", "strikethrough-color"].includes(key)) {
+        // Just take this property 1:1, converted to CSS properties afterwards
+        converted = {[key]: value};
+
     } else if (["width", "height", "border-radius", "line-height", "color", "background-color",
         "font-family", "font-weight", "underline", "margin-top", "margin-bottom", "margin-left",
         "margin-right", "padding", "opacity", "gap", "font-size", "font-style", "border-style",
-        "border-color", "border-width"].includes(key)) {
+        "border-color", "border-width", "line-height"].includes(key)) {
         converted = {[key]: value};
     } else {
         console.error("INVALID CSS KEY/VALUE PAIR:", key, value);
@@ -302,6 +304,7 @@ function convertHTMLPP2HTML(domain, htmlpp, fileGetterCallback, cb) {
     let lines = htmlpp.split("\n");
     let htmlppCleared = "";
     lines.forEach((line) => {
+        // TODO: This
         if (line.startsWith("<script href=") && line.endsWith(" />"))
             line = line.replace(" />", " ></script>");
     
