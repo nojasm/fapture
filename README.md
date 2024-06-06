@@ -4,6 +4,8 @@
 
 The Web-Based viewer for buss:// Websites. See [https://github.com/face-hh/webx/] for more information about webx and buss://.
 
+![Fapture Page](/res/page-1.png)
+
 # Getting started
 Requires nodeJS to be installed on the host machine.
 ```sh
