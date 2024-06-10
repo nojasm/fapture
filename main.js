@@ -61,11 +61,29 @@ class DNS {
                 this.domains = JSON.parse(fs.readFileSync(this.url));
                 callback(this.domains);
             } else {
-                fetchFile(this.url, (content) => {
+                //Old Code
+                /*fetchFile(this.url, (content) => {
                     this.domains = JSON.parse(content);
                     console.log("Refreshed " + this.domains.length + " domains");
                     callback(this.domains);
-                });
+                });*/
+                let pageCount = 1
+                let fetchDns = () => {
+                    fetch(`https://api.buss.lol/domains?limit=100&page=${pageCount}`).then(_ => _.json().then(res => {
+                        if (res.domains.length > 0) {
+                            console.log(res.domains.length)
+                            this.domains = [...this.domains, ...res.domains]
+                            pageCount++
+                            fetchDns()
+                        } else {
+                            console.log("Refreshed " + this.domains.length + " domains");
+                            callback(this.domains);
+                        }
+
+                    }))
+                }
+                fetchDns()
+
             }
         } else {
             callback(this.domains);
@@ -151,7 +169,7 @@ class BundleCache {
     isCached(url, callback) {
         callback(url in this.bundles);
     }
-    
+
     cache(url, bundle) {
         this.bundles[url] = bundle;
         this.save();
@@ -202,12 +220,12 @@ function CSSPP2CSS(csspp, cb) {
         // Ignore whitespace if not currently in value
         if (mode != "read_rule_value" && (char == "" || char == "\n" || char == " " || char == "\t" || char == "\r"))
             return;
-    
+
         if (mode == "ignore_till_semicolon") {
             if (char == ";") mode = "read_selector";
             return;
         }
-        
+
         if (mode == "read_selector") {
             if (char.match(/[a-zA-Z0-9\-_]/)) {
                 currentSelector += char;
@@ -237,10 +255,10 @@ function CSSPP2CSS(csspp, cb) {
         } else if (mode == "read_rule_value") {
             if (char == ";" || char == "}") {
                 currentValue = currentValue.trimStart();
-                
+
                 if (currentKey == "gap" && currentValue.match(/[0-9]+/))
                     currentValue += "px";
-                
+
                 // Add rules and overwrite old rule keys of that selector if needed
                 let rules = convertCSSPPKeyValue(currentKey, currentValue);
                 Object.entries(rules).forEach((rule) => {
@@ -250,7 +268,7 @@ function CSSPP2CSS(csspp, cb) {
                 mode = "read_rule_key";
                 currentKey = "";
                 currentValue = "";
-                
+
             } else {
                 currentValue += char
             }
@@ -286,13 +304,13 @@ function convertCSSPPKeyValue(key, value) {
         // Ignore, just always wrap for now
     } else if (["underline", "underline-color", "overline", "overline-color", "strikethrough", "strikethrough-color"].includes(key)) {
         // Just take this property 1:1, converted to CSS properties afterwards
-        converted = {[key]: value};
+        converted = { [key]: value };
 
     } else if (["width", "height", "border-radius", "line-height", "color", "background-color",
         "font-family", "font-weight", "underline", "margin-top", "margin-bottom", "margin-left",
         "margin-right", "padding", "opacity", "gap", "font-size", "font-style", "border-style",
         "border-color", "border-width", "line-height"].includes(key)) {
-        converted = {[key]: value};
+        converted = { [key]: value };
     } else {
         console.error("INVALID CSS KEY/VALUE PAIR:", key, value);
     }
@@ -307,7 +325,7 @@ function convertHTMLPP2HTML(domain, htmlpp, fileGetterCallback, cb) {
         // TODO: This
         if (line.startsWith("<script href=") && line.endsWith(" />"))
             line = line.replace(" />", " ></script>");
-    
+
         htmlppCleared += line + "\n";
     });
 
@@ -338,12 +356,12 @@ function convertHTMLPP2HTML(domain, htmlpp, fileGetterCallback, cb) {
             //meta.title = node.innerText;
             let key = node.getAttribute("name");
             let value = node.getAttribute("content");
-            
+
             if (key == "theme-color")
                 meta.themeColor = value;
             else if (key == "description")
                 meta.description = value;
-        
+
         } else if (node.tagName == "SCRIPT") {
             //meta.title = node.innerText;
             console.log("Including script");
@@ -453,12 +471,12 @@ app.get("/", (req, res) => {
 app.post("/search", (req, res) => {
     let _url = req.body.query;
 
-	console.log("Query: " + _url);
+    console.log("Query: " + _url);
 
-	if (_url.startsWith("buss://")) _url = _url.substring(7);
+    if (_url.startsWith("buss://")) _url = _url.substring(7);
 
-	let name = _url.split(".")[0];
-	let tld = _url.split(".")[1];
+    let name = _url.split(".")[0];
+    let tld = _url.split(".")[1];
 
     let url = name + "." + tld;
 
@@ -476,9 +494,9 @@ app.post("/search", (req, res) => {
                     if (faptureDomain.host == "github") {
                         getNewestRepoCommit(faptureDomain.github_username, faptureDomain.github_repo, (commit) => {
                             let baseURL = "https://raw.githubusercontent.com/" + faptureDomain.github_username + "/" + faptureDomain.github_repo + "/" + commit;
-    
+
                             console.log("Loading from", baseURL);
-    
+
                             createBundle(faptureDomain, (path, callback) => {
                                 //console.log("{BUNDLE} Bundler asks for: " + path);
                                 /*if (path == "index.html") {
@@ -488,9 +506,9 @@ app.post("/search", (req, res) => {
                                 } else if (path == "styles.css") {
                                     callback("* { background-color: pink }");
                                 }*/
-                                
+
                                 console.log("  Bundler is loading", path);
-    
+
                                 if (path.endsWith(".css")) {
                                     fetchFile(baseURL + "/" + path, (csspp) => {
                                         CSSPP2CSS(csspp, (css) => {
@@ -517,7 +535,7 @@ app.post("/search", (req, res) => {
 });
 
 app.get(/^.*\.(html|css|js|png|jpg|jpeg|svg|ico|ttf)/, (req, res) => {
-	res.sendFile(root + req.url.split("?")[0]);
+    res.sendFile(root + req.url.split("?")[0]);
 });
 
 app.listen(3000, () => {
